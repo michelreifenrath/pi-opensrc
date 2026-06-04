@@ -1,0 +1,32 @@
+name: Sync opensrc
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 7 * * 1"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run sync:opensrc
+      - name: Bump wrapper version if upstream changed
+        run: |
+          if [ -n "$(git status --porcelain package.json package-lock.json skills/opensrc/SKILL.md LICENSE)" ]; then
+            npm version patch --no-git-tag-version
+          fi
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          branch: sync/opensrc-latest
+          title: "Sync latest opensrc"
+          commit-message: "Sync latest opensrc"
+          body: "Automated sync of the upstream opensrc npm package and Pi skill."

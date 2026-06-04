@@ -1,0 +1,52 @@
+{
+  "name": "pi-opensrc",
+  "version": "0.1.0",
+  "description": "Unofficial Pi package for vercel-labs/opensrc: installs the opensrc CLI and Pi skill.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michelreifenrath/pi-opensrc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/michelreifenrath/pi-opensrc/issues"
+  },
+  "homepage": "https://github.com/michelreifenrath/pi-opensrc#readme",
+  "keywords": [
+    "pi-package",
+    "pi",
+    "pi-coding-agent",
+    "agent-skills",
+    "opensrc",
+    "source-code",
+    "coding-agents"
+  ],
+  "files": [
+    "extensions",
+    "skills",
+    "scripts",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "sync:opensrc": "node scripts/sync-opensrc.mjs",
+    "check": "node scripts/check.mjs",
+    "prepack": "npm run check"
+  },
+  "dependencies": {
+    "opensrc": "0.7.2"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/path.js"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  },
+  "metadata": {
+    "opensrcVersion": "0.7.2",
+    "upstream": "https://github.com/vercel-labs/opensrc"
+  }
+}
