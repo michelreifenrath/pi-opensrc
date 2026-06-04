@@ -1,6 +1,6 @@
 # Releasing
 
-`pi-opensrc` should be published with npm trusted publishing and provenance from GitHub Actions, not with a long-lived local npm token.
+`pi-opensrc` publishes from GitHub Actions with npm trusted publishing and provenance. Do not publish with long-lived local npm tokens.
 
 ## One-time npm setup
 
@@ -10,30 +10,36 @@ In the npm package settings for `pi-opensrc`, add a trusted publisher:
 - Workflow: `.github/workflows/release.yml`
 - Environment: `npm-publish`
 
-## Release steps
-
-1. Sync upstream if needed:
-
-   ```bash
-   npm run sync:opensrc
-   ```
-
-2. Bump the wrapper version:
-
-   ```bash
-   npm version patch
-   ```
-
-3. Push the commit and tag:
-
-   ```bash
-   git push origin main --follow-tags
-   ```
-
-4. Create a GitHub release for the tag.
-
-The `Release` workflow verifies that the tag matches `package.json` and runs:
+Equivalent npm CLI command:
 
 ```bash
-npm publish --provenance --access public
+npm trust github pi-opensrc \
+  --repo michelreifenrath/pi-opensrc \
+  --file release.yml \
+  --env npm-publish
 ```
+
+## Automatic upstream sync and publish
+
+1. `.github/workflows/sync-opensrc.yml` runs weekly and can also be started manually.
+2. If upstream `opensrc` changed, it updates:
+   - `package.json`
+   - `package-lock.json`
+   - `skills/opensrc/SKILL.md`
+   - `LICENSE`
+3. The sync workflow bumps the wrapper patch version and opens a PR.
+4. After the PR is reviewed and merged into `main`, `.github/workflows/release.yml`:
+   - skips if `pi-opensrc@<version>` is already on npm
+   - verifies the package
+   - publishes to npm with provenance
+   - creates the matching GitHub release tag `v<version>`
+
+## Manual release fallback
+
+If needed, bump the wrapper version and merge the change into `main`:
+
+```bash
+npm version patch --no-git-tag-version
+```
+
+The `Release` workflow handles npm publishing and GitHub release creation after the merge.
