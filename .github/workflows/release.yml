@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    if: startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Verify release tag matches package version
+        run: |
+          node <<'NODE'
+          const pkg = require("./package.json");
+          const tag = process.env.GITHUB_REF_NAME;
+          const expected = `v${pkg.version}`;
+          if (tag !== expected) {
+            throw new Error(`Release tag ${tag} does not match package version ${expected}`);
+          }
+          NODE
+      - run: npm run check
+      - run: npm publish --provenance --access public

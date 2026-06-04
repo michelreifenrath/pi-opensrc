@@ -27,7 +27,9 @@
     "scripts",
     "README.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "SECURITY.md",
+    "RELEASING.md"
   ],
   "scripts": {
     "sync:opensrc": "node scripts/sync-opensrc.mjs",
