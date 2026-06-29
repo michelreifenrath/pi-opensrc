@@ -1,6 +1,6 @@
 {
   "name": "pi-opensrc",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unofficial Pi package for vercel-labs/opensrc: installs the opensrc CLI and Pi skill.",
   "type": "module",
   "license": "Apache-2.0",
@@ -37,7 +37,7 @@
     "prepack": "npm run check"
   },
   "dependencies": {
-    "opensrc": "0.7.2"
+    "opensrc": "0.7.3"
   },
   "pi": {
     "extensions": [
@@ -48,7 +48,7 @@
     ]
   },
   "metadata": {
-    "opensrcVersion": "0.7.2",
+    "opensrcVersion": "0.7.3",
     "upstream": "https://github.com/vercel-labs/opensrc"
   }
 }
