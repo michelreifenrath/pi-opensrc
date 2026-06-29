@@ -37,7 +37,7 @@
     "prepack": "npm run check"
   },
   "dependencies": {
-    "opensrc": "0.7.2"
+    "opensrc": "0.7.3"
   },
   "pi": {
     "extensions": [
